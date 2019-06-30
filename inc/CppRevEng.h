@@ -242,11 +242,11 @@ public:
 	}
 };
 
-template<class DetourClass, typename Result, typename ... Arguments>
+template<typename DetourClass, typename Result, typename ... Arguments>
 typename static_detour_<DetourClass, Result(Arguments...)>::detour_pointer 
 	static_detour_<DetourClass, Result(Arguments...)>::original_function;
 
-template<class DetourClass, typename BaseClass, typename VirtualClass, typename Result, typename ... Arguments>
+template<typename DetourClass, typename BaseClass, typename VirtualClass, typename Result, typename ... Arguments>
 typename member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)>::detour_pointer
 member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)>::original_function;
 
@@ -258,12 +258,12 @@ member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)>::orig
 /// Inside the detoured function, you can call the original function using `original_function()` with 
 /// the appropiate parameters. For example, `original_function(3, myObject, 4.0)`
 ///
-/// This is a class object, so you must follow this declaration with {}. Inside you can define
+/// This is a struct object, so you must follow this declaration with {}. Inside you can define
 /// static functions and static variables as well.
 ///
 /// @param name The name of this detour object.
 /// @param declaration The function declaration, with no names. For example, <code>void(int, float)</code>
-#define static_detour(name, declaration) class name : public static_detour_< name , declaration > 
+#define static_detour(name, declaration) struct name : public static_detour_< name , declaration > 
 
 /// Detours a class member method. In the macro parameters you must specify:
 /// - name: A name given to this detour object, to differentiate it from the rest.
@@ -276,13 +276,13 @@ member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)>::orig
 ///
 /// Inside the detoured function, you can can access the `this` pointer and any public/protected fields of the base class.
 ///
-/// This is a class object, so you must follow this declaration with {}. Inside you can define
+/// This is a struct object, so you must follow this declaration with {}. Inside you can define
 /// methods (static and member) and static variables as well. You cannot add member variables.
 ///
 /// @param name The name of this detour object.
 /// @param baseClass The name of the class where the method is. From the detoured code you can access its members.
 /// @param declaration The method declaration, with no names. For example, <code>void(int, float)</code>
-#define member_detour(name, baseClass, declaration) class name : public member_detour_< name , baseClass, baseClass, declaration > 
+#define member_detour(name, baseClass, declaration) struct name : public member_detour_< name , baseClass, baseClass, declaration > 
 
 /// Detours a virtual class member method. In the macro parameters you must specify:
 /// - name: A name given to this detour object, to differentiate it from the rest.
@@ -310,11 +310,11 @@ member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)>::orig
 ///
 /// Inside the detoured function, you can can access the `this` pointer and any public/protected fields of the base class.
 ///
-/// This is a class object, so you must follow this declaration with {}. Inside you can define
+/// This is a struct object, so you must follow this declaration with {}. Inside you can define
 /// methods (static and member) and static variables as well. You cannot add member variables.
 ///
 /// @param name The name of this detour object.
 /// @param baseClass The name of the class where the method is. From the detoured code you can access its members.
 /// @param virtualClass The name of the class where the method is declared.
 /// @param declaration The method declaration, with no names. For example, <code>void(int, float)</code>
-#define virtual_detour(name, baseClass, virtualClass, declaration) class name : public member_detour_< name , baseClass, virtualClass, declaration > 
+#define virtual_detour(name, baseClass, virtualClass, declaration) struct name : public member_detour_< name , baseClass, virtualClass, declaration > 
