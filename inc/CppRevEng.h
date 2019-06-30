@@ -24,7 +24,7 @@
 #include <detours.h>
 
 /*
-This class is used to simplify the process of detouring functions. When using DLL injection, 
+This header is used to simplify the process of detouring functions. When using DLL injection, 
 detouring is the most important technique: it allows you to hook the executable methods and
 override them with your own functionality.
 
@@ -33,8 +33,7 @@ This header file defines 3 macros:
  - `member_detour`: for non-static, non-virtual methods.
  - `virtual_detour`: for non-static, virtual methods.
 
-These macros are class declarations, so you must follow them with a {};  - don't forget the final semicolon!
-Also, use the `public:` keyword when defining the detoured method.
+These macros are struct declarations, so you must follow them with a {};  - don't forget the final semicolon!
 
 All macros take at least two parameters: 
  - `name`: A unique name to identify the detour object. You will use it to attach the detour.
@@ -44,7 +43,6 @@ All macros take at least two parameters:
 
 Imagine you want to detour a static function that returns a float, and takes a const char* as parameter. You would do it like this:
 static_detour(MyDetour1, float(const char*)) {
-public:
 	float detoured(const char* pString) {
 		if (pString[0] == '_') return -1.0f;
 		else {
@@ -65,7 +63,6 @@ protected:
 }
 
 member_detour(MyDetour2, ClassManager, void()) {
-public:
 	void detoured() {
 		MessageBox("Objects are being deleted");
 		// You can access the public and protected fields:
@@ -85,13 +82,12 @@ protected:
 }
 
 virtual_detour(MyDetour3, cCreature, ICombatant, void(float, float)) {
-public:
 	void detoured(float strength, float distance) {
 		// I want to be immortal!
 		if (mHealthPoints < 10) mHealthPoints += 1000.0f;
 		original_function(strength, distance);
 	}
-}
+};
 
 ## Attaching/detaching detours
 
@@ -180,7 +176,7 @@ class member_detour_;
 /// @tparam Result The return type of the function to detour, can be void.
 /// @tparam Parameters The parameter types of the function to detour, can be empty.
 template<typename DetourClass, typename Result, typename ... Parameters>
-class static_detour_<DetourClass, Result(Parameters...)>
+struct static_detour_<DetourClass, Result(Parameters...)>
 {
 public:
 	/// The type of function pointer used to keep track of the original function.
@@ -208,13 +204,16 @@ public:
 	}
 };
 
+/// The object used for detouring non-static functions. 
+/// This is internal, for real usage check member_detour or virtual_detour macros.
+///
 /// @tparam DetourClass The name of the class that is extending this object and is being used to hold the detour.
 /// @tparam BaseClass The name of the class this object is simulating, must contain the method (or any of its superclasses must)
 /// @tparam VirtualClass The name of the base class where the method was defined. For non-virtual methods, this must be the same as BaseClass.
 /// @tparam Result The return type of the function to detour, can be void.
 /// @tparam Parameters The parameter types of the function to detour, can be empty.
 template<typename DetourClass, typename BaseClass, typename VirtualClass, typename Result, typename ... Arguments>
-class member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)> : public BaseClass
+struct member_detour_<DetourClass, BaseClass, VirtualClass, Result(Arguments...)> : public BaseClass
 {
 public:
 	/// The type of function pointer used to keep track of the original function.

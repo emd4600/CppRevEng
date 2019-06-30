@@ -111,8 +111,7 @@ This header file defines 3 macros:
  - `member_detour`: for non-static, non-virtual methods.
  - `virtual_detour`: for non-static, virtual methods.
 
-These macros are class declarations, so you must follow them with a {};  - don't forget the final semicolon!
-Also, use the `public:` keyword when defining the detoured method.
+These macros are struct declarations, so you must follow them with a {};  - don't forget the final semicolon!
 
 All macros take at least two parameters: 
  - `name`: A unique name to identify the detour object. You will use it to attach the detour.
@@ -123,7 +122,6 @@ All macros take at least two parameters:
 Imagine you want to detour a static function that returns a float, and takes a const char* as parameter. You would do it like this:
 ```cpp
 static_detour(MyDetour1, float(const char*)) {
-public:
 	float detoured(const char* pString) {
 		if (pString[0] == '_') return -1.0f;
 		else {
@@ -145,7 +143,6 @@ protected:
 }
 
 member_detour(MyDetour2, ClassManager, void()) {
-public:
 	void detoured() {
 		MessageBox("Objects are being deleted");
 		// You can access the public and protected fields:
@@ -166,13 +163,12 @@ protected:
 }
 
 virtual_detour(MyDetour3, cCreature, ICombatant, void(float, float)) {
-public:
 	void detoured(float strength, float distance) {
 		// I want to be immortal!
 		if (mHealthPoints < 10) mHealthPoints += 1000.0f;
 		original_function(strength, distance);
 	}
-}
+};
 ```
 
 ### Attaching/detaching detours

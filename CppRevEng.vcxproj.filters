@@ -45,5 +45,7 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
+    <None Include="example\README.md" />
+    <None Include="LICENSE" />
   </ItemGroup>
 </Project>

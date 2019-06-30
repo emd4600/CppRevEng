@@ -151,7 +151,7 @@ inline void InitCppRevEng() {
 //    namespaceName: The name of the namespace that stores the addresses.
 //    name: The name of the function declared in the header.
 //    returnType: The return type of the function, can be void.
-#define RedirectStaticMethod_noargs(namespaceName, name, returnTyp) returnType namespaceName::name() { return ((returnType(*)()) GetAddress(namespaceName, name))(); }
+#define RedirectStaticMethod_noargs(namespaceName, name, returnType) returnType namespaceName::name() { return ((returnType(*)()) GetAddress(namespaceName, name))(); }
 
 // Defines the body of a redirected static function whose address is stored in an address namespace. 
 // This should only be used if it returns a big struct (i.e. sizeof() > 8) by value. Examples:
