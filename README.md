@@ -166,7 +166,7 @@ virtual_detour(MyDetour3, cCreature, ICombatant, void(float, float)) {
 	void detoured(float strength, float distance) {
 		// I want to be immortal!
 		if (mHealthPoints < 10) mHealthPoints += 1000.0f;
-		original_function(strength, distance);
+		original_function(this, strength, distance);
 	}
 };
 ```
